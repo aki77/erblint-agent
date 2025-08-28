@@ -3,6 +3,7 @@
 module ERBLint
   module Linters
     module Agent
+      # Provides custom helper methods for ERB linting agents.
       module CustomHelpers
         def generate_offense(klass, processed_source, tag, message = nil, replacement = nil)
           message ||= klass::MESSAGE

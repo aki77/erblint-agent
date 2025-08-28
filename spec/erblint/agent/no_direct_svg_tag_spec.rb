@@ -32,7 +32,7 @@ RSpec.describe ERBLint::Linters::Agent::NoDirectSvgTag do
       end
 
       context "with multiple SVG tags" do
-        let(:file_content) { '<svg /><div></div><svg></svg>' }
+        let(:file_content) { "<svg /><div></div><svg></svg>" }
 
         it "adds multiple offenses" do
           subject
