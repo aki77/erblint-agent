@@ -53,13 +53,13 @@ linters:
 Run erb-lint with:
 
 ```bash
-bundle exec erblint --lint-all
+bundle exec erb_lint --lint-all
 ```
 
 Or check specific files:
 
 ```bash
-bundle exec erblint app/views/**/*.erb
+bundle exec erb_lint app/views/**/*.erb
 ```
 
 ## Available Linters
