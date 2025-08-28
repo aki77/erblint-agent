@@ -1,38 +1,136 @@
 # Erblint::Agent
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/erblint/agent`. To experiment with that code, run `bin/console` for an interactive prompt.
+Template style checking for Ruby projects aimed at AI agents.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
-
-```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```ruby
+group :development do
+  gem 'erb_lint', require: false
+  gem 'erblint-agent', require: false
+end
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+And then execute:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+bundle install
 ```
 
 ## Usage
 
-TODO: Write usage instructions here
+### Configuration
 
-## Development
+Require the lint rules from this library. Currently, the only supported way is to add a new file in `.erb-linters/erblint_agent.rb` with the line:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+require 'erblint/agent/linters'
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Create or update your `.erb-lint.yml` configuration file:
 
-## Contributing
+```yaml
+---
+inherit_gem:
+  erblint-agent:
+    - config/default.yml
+linters:
+  Agent::NoDirectSvgTag:
+    # message: "Custom error message" # Optional: customize the error message
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/erblint-agent. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/erblint-agent/blob/main/CODE_OF_CONDUCT.md).
+  Agent::NoDirectEmoji:
+    # message: "Custom error message" # Optional: customize the error message
+
+  Agent::NoSpecificClasses:
+    forbidden_classes:
+      "card": "Use 'CardComponent' instead"
+```
+
+### Running the Linters
+
+Run erb-lint with:
+
+```bash
+bundle exec erblint --lint-all
+```
+
+Or check specific files:
+
+```bash
+bundle exec erblint app/views/**/*.erb
+```
+
+## Available Linters
+
+### Agent::NoDirectSvgTag
+
+Prohibits direct use of SVG tags. Recommends using Tailwind CSS Icons instead.
+
+**Configuration:**
+```yaml
+Agent::NoDirectSvgTag:
+  enabled: true
+  message: "Custom error message" # Optional: override default message
+```
+
+**Bad:**
+```erb
+<svg>...</svg>
+<svg class="icon" />
+```
+
+**Good:**
+```erb
+<span class="i-bi-people"></span>
+```
+
+### Agent::NoDirectEmoji
+
+Prohibits direct use of Unicode emojis. Recommends using icon classes instead.
+
+**Configuration:**
+```yaml
+Agent::NoDirectEmoji:
+  enabled: true
+  message: "Custom error message" # Optional: override default message
+```
+
+**Bad:**
+```erb
+<p>Welcome! 😊</p>
+```
+
+**Good:**
+```erb
+<p>Welcome! <span class="i-bi-emoji-smile"></span></p>
+```
+
+### Agent::NoSpecificClasses
+
+Prohibits the use of specific class names defined in configuration.
+
+**Configuration:**
+```yaml
+Agent::NoSpecificClasses:
+  enabled: true
+  forbidden_classes:
+    "btn-old": "Use 'btn' class instead"
+    "text-bold": "Use 'font-bold' instead"
+```
+
+**Bad:**
+```erb
+<button class="btn-old">Click</button>
+<p class="text-bold">Important</p>
+```
+
+**Good:**
+```erb
+<button class="btn">Click</button>
+<p class="font-bold">Important</p>
+```
 
 ## License
 
@@ -40,4 +138,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Erblint::Agent project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/erblint-agent/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the Erblint::Agent project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/aki77/erblint-agent/blob/main/CODE_OF_CONDUCT.md).

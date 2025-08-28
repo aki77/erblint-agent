@@ -1,0 +1,9 @@
+linters:
+  Agent::NoDirectSvgTag:
+    enabled: true
+
+  Agent::NoDirectEmoji:
+    enabled: true
+
+  Agent::NoSpecificClasses:
+    enabled: true

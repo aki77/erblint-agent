@@ -1,5 +1,5 @@
 export default {
-  "*.rb": [
+  "lib/**/*.rb": [
     "bundle exec rubocop -a"
   ],
 };
