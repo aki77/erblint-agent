@@ -7,3 +7,6 @@ linters:
 
   Agent::NoSpecificClasses:
     enabled: true
+
+  Agent::NoSpecificAttributes:
+    enabled: true
