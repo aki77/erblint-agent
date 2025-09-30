@@ -46,6 +46,10 @@ linters:
   Agent::NoSpecificClasses:
     forbidden_classes:
       "card": "Use 'CardComponent' instead"
+
+  Agent::NoSpecificAttributes:
+    forbidden_attributes:
+      "onclick": "Use event listeners instead"
 ```
 
 ### Running the Linters
@@ -130,6 +134,31 @@ Agent::NoSpecificClasses:
 ```erb
 <button class="btn">Click</button>
 <p class="font-bold">Important</p>
+```
+
+### Agent::NoSpecificAttributes
+
+Prohibits the use of specific HTML attributes defined in configuration.
+
+**Configuration:**
+```yaml
+Agent::NoSpecificAttributes:
+  enabled: true
+  forbidden_attributes:
+    "data-testid": "Use 'data-test-selector' attribute instead"
+    "onclick": "Use event listeners instead"
+```
+
+**Bad:**
+```erb
+<button data-testid="submit-btn">Submit</button>
+<div onclick="handleClick()">Click me</div>
+```
+
+**Good:**
+```erb
+<button data-test-selector="submit-btn">Submit</button>
+<div data-action="click->controller#handleClick">Click me</div>
 ```
 
 ## License
